@@ -17,16 +17,16 @@ Inspection Points:
 2 - The tank car was in an accident and shows evidence of damage to an extent that may adversely affect its capability to retain its contents or to otherwise remain railworthy
 3 - The tank bears evidence of damage caused by fire
 
-https://www.law.cornell.edu/cfr/text/49/180.509
-
+<https://www.law.cornell.edu/cfr/text/49/180.509>
 
 Design Pattern:
-Add image to S3 bucket
-Notify Lambda function upon addition of image
-Lambda funs rekognition analysis
-    It should find a value of 2-4 letters and 5-6 numbers
-    Ensure Confidence is over 9000(95%)!
-Lambda selects the "Detected Text"
-Lambda tags an image with the tag "railcar_serial" : "DetectedText Value"
-Alert/Notify off of the tagging update (if possible only for "DetectedText")
-    Run Lambda function to alert a CMMS (dumby api)
+
+1. Add image to S3 bucket
+2. Notify Lambda function upon addition of image
+3. Lambda funs rekognition analysis
+    1. It should find a value of 2-4 letters and 5-6 numbers
+    2. Ensure Confidence is over 9000(95%)!
+4. Lambda selects the "Detected Text"
+5. Lambda tags an image with the tag "railcar_serial" : "DetectedText Value"
+6. Alert/Notify off of the tagging update (if possible only for "DetectedText")
+    1. Run Lambda function to alert a CMMS (dumby api)
