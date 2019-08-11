@@ -1,0 +1,2 @@
+cd trainsplotting-cdk
+.env\Scripts\activate.bat
