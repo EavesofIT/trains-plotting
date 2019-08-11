@@ -1,4 +1,5 @@
 # trains-plotting
+
 Hackathon Ideas:
 1 - Identify Railcar serial numbers
     Push a bunch of good and bad images of railcars to the S3 bucket for analysis
@@ -14,7 +15,7 @@ Hackathon Ideas:
 Inspection Points:
 1 - The tank car shows of abrasion, corrosion, cracks, dents, distortions, defects in welds, or any other condition that may make the tank car unsafe for transportation
 2 - The tank car was in an accident and shows evidence of damage to an extent that may adversely affect its capability to retain its contents or to otherwise remain railworthy
-3 - The tank bears evidence of damage caused by fire 
+3 - The tank bears evidence of damage caused by fire
 
 https://www.law.cornell.edu/cfr/text/49/180.509
 
@@ -24,7 +25,7 @@ Add image to S3 bucket
 Notify Lambda function upon addition of image
 Lambda funs rekognition analysis
     It should find a value of 2-4 letters and 5-6 numbers
-    Ensure Confidence is over 9000(95%)! 
+    Ensure Confidence is over 9000(95%)!
 Lambda selects the "Detected Text"
 Lambda tags an image with the tag "railcar_serial" : "DetectedText Value"
 Alert/Notify off of the tagging update (if possible only for "DetectedText")
