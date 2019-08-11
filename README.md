@@ -19,7 +19,7 @@ Inspection Points:
 
 <https://www.law.cornell.edu/cfr/text/49/180.509>
 
-Design Pattern:
+## Design Pattern
 
 1. Add image to S3 bucket
 2. Notify Lambda function upon addition of image
