@@ -1,9 +1,12 @@
 from aws_cdk import (
+    core,
     aws_s3 as s3,
+    aws_s3_notifications as s3n,
     aws_events as events,
     aws_lambda as lambda_,
     aws_events_targets as targets,
-    core
+    aws_lambda_event_sources as lambdaevents,
+    aws_sns as sns
 )
 
 
@@ -15,7 +18,7 @@ class TrainsplottingCdkStack(core.Stack):
         bucket = s3.Bucket(self, 
             "trainsplotting-ingestion",
             encryption=s3.BucketEncryption.S3_MANAGED,
-            block_public_access=s3.BlockPublicAccess.BLOCK_ALL
+            block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
         )
 
         #**********#
@@ -34,13 +37,12 @@ class TrainsplottingCdkStack(core.Stack):
             runtime=lambda_.Runtime.PYTHON_3_7,
         )
         
-        rule = events.Rule(
-            self, "Rule",
-            schedule=events.Schedule.cron(
-                minute='0',
-                hour='18',
-                month='*',
-                week_day='MON-FRI',
-                year='*'),
-        )
-        rule.add_target(targets.LambdaFunction(lambdaFn))
+        lambdaFn.add_event_source(lambdaevents.S3EventSource(bucket,events=[s3.EventType.OBJECT_CREATED]))
+        #bucket.add_event_notification(s3.EventType.OBJECT_CREATED,s3n.LambdaDestination(lambdaFn))
+        #ingestiontopic.add_subscription()
+        #lambdaevents.S3EventSource(bucket,) ------ Runs, doesn't work
+        #bucket.addEventNotification(s3.EventType.OBJECT_CREATED,) ----- Closeish, can't get the second or third object references to work
+        #rule.add_target(targets.LambdaFunction(lambdaFn))
+        #bucket.add_target(targets.LambdaFunction(lambdaFn))
+        #bucket.add_event_notification(s3.EventType.OBJECT_CREATED,'photo-ingestion','*')
+        #bucket.addEventNotification(s3.EventType.OBJECT_CREATED_PUT, s3n.LambdaDestination(topic)) https://docs.aws.amazon.com/cdk/api/latest/python/aws_cdk.aws_s3_notifications.html

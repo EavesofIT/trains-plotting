@@ -4,3 +4,4 @@ aws-cdk.aws-events-targets
 aws-cdk.aws-lambda
 aws-cdk.core
 aws-cdk.aws-s3
+aws-cdk.aws_lambda_event_sources
