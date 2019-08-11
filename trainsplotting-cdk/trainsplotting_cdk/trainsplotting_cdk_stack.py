@@ -11,6 +11,6 @@ class TrainsplottingCdkStack(core.Stack):
 
         bucket = s3.Bucket(self, 
             "trainsplotting-ingestion",
-            bucket_name="trainsplotting-ingestion",
             encryption=s3.BucketEncryption.S3_MANAGED,
+            block_public_access=s3.BlockPublicAccess.BLOCK_ALL
         )
