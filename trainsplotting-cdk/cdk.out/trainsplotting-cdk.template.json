@@ -1,1 +1,129 @@
-{}
+{
+  "Resources": {
+    "trainsplottingingestion160B4B0F": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "trainsplotting-cdk/trainsplotting-ingestion/Resource"
+      }
+    },
+    "photoingestionServiceRole8DED711F": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "trainsplotting-cdk/photo-ingestion/ServiceRole/Resource"
+      }
+    },
+    "photoingestion90ECE3EC": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "ZipFile": "def main(event, context):\n    print(\"I'm running!\")\n    print(\"I'll update to run code that will process an image through Rekognition and tag the picture!\")"
+        },
+        "Handler": "index.main",
+        "Role": {
+          "Fn::GetAtt": [
+            "photoingestionServiceRole8DED711F",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.7",
+        "Timeout": 300
+      },
+      "DependsOn": [
+        "photoingestionServiceRole8DED711F"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "trainsplotting-cdk/photo-ingestion/Resource"
+      }
+    },
+    "photoingestionAllowEventRuletrainsplottingcdkRule45E3095A901F4960": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "photoingestion90ECE3EC",
+            "Arn"
+          ]
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "Rule4C995B7F",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "trainsplotting-cdk/photo-ingestion/AllowEventRuletrainsplottingcdkRule45E3095A"
+      }
+    },
+    "Rule4C995B7F": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "ScheduleExpression": "cron(0 18 ? * MON-FRI *)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "photoingestion90ECE3EC",
+                "Arn"
+              ]
+            },
+            "Id": "Target0"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "trainsplotting-cdk/Rule/Resource"
+      }
+    }
+  }
+}
