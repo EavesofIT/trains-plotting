@@ -13,7 +13,7 @@
             "type": "aws:cdk:logicalId",
             "data": "trainsplottingingestion160B4B0F",
             "trace": [
-              "new Bucket (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-7J6jwO\\node_modules\\@aws-cdk\\aws-s3\\lib\\bucket.js:342:26)",
+              "new Bucket (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-kWMm4U\\node_modules\\@aws-cdk\\aws-s3\\lib\\bucket.js:342:26)",
               "obj._wrapSandboxCode (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:6666:49)",
               "Kernel._wrapSandboxCode (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:7131:20)",
               "Kernel._create (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:6666:26)",
@@ -39,8 +39,8 @@
             "type": "aws:cdk:logicalId",
             "data": "photoingestionServiceRole8DED711F",
             "trace": [
-              "new Role (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-7J6jwO\\node_modules\\@aws-cdk\\aws-iam\\lib\\role.js:30:22)",
-              "new Function (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-7J6jwO\\node_modules\\@aws-cdk\\aws-lambda\\lib\\function.js:59:35)",
+              "new Role (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-kWMm4U\\node_modules\\@aws-cdk\\aws-iam\\lib\\role.js:30:22)",
+              "new Function (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-kWMm4U\\node_modules\\@aws-cdk\\aws-lambda\\lib\\function.js:59:35)",
               "obj._wrapSandboxCode (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:6666:49)",
               "Kernel._wrapSandboxCode (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:7131:20)",
               "Kernel._create (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:6666:26)",
@@ -78,7 +78,7 @@
             "type": "aws:cdk:logicalId",
             "data": "photoingestion90ECE3EC",
             "trace": [
-              "new Function (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-7J6jwO\\node_modules\\@aws-cdk\\aws-lambda\\lib\\function.js:73:26)",
+              "new Function (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-kWMm4U\\node_modules\\@aws-cdk\\aws-lambda\\lib\\function.js:73:26)",
               "obj._wrapSandboxCode (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:6666:49)",
               "Kernel._wrapSandboxCode (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:7131:20)",
               "Kernel._create (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:6666:26)",
@@ -116,9 +116,9 @@
             "type": "aws:cdk:logicalId",
             "data": "photoingestionAllowEventRuletrainsplottingcdkRule45E3095A901F4960",
             "trace": [
-              "Function.addPermission (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-7J6jwO\\node_modules\\@aws-cdk\\aws-lambda\\lib\\function-base.js:19:9)",
-              "LambdaFunction.bind (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-7J6jwO\\node_modules\\@aws-cdk\\aws-events-targets\\lib\\lambda.js:19:26)",
-              "Rule.addTarget (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-7J6jwO\\node_modules\\@aws-cdk\\aws-events\\lib\\rule.js:61:36)",
+              "Function.addPermission (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-kWMm4U\\node_modules\\@aws-cdk\\aws-lambda\\lib\\function-base.js:19:9)",
+              "LambdaFunction.bind (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-kWMm4U\\node_modules\\@aws-cdk\\aws-events-targets\\lib\\lambda.js:19:26)",
+              "Rule.addTarget (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-kWMm4U\\node_modules\\@aws-cdk\\aws-events\\lib\\rule.js:61:36)",
               "_wrapSandboxCode (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:6498:51)",
               "Kernel._wrapSandboxCode (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:7131:20)",
               "ret._ensureSync (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:6498:25)",
@@ -169,7 +169,7 @@
             "type": "aws:cdk:logicalId",
             "data": "Rule4C995B7F",
             "trace": [
-              "new Rule (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-7J6jwO\\node_modules\\@aws-cdk\\aws-events\\lib\\rule.js:21:26)",
+              "new Rule (C:\\Users\\ajdog\\AppData\\Local\\Temp\\jsii-kernel-kWMm4U\\node_modules\\@aws-cdk\\aws-events\\lib\\rule.js:21:26)",
               "obj._wrapSandboxCode (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:6666:49)",
               "Kernel._wrapSandboxCode (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:7131:20)",
               "Kernel._create (C:\\Users\\ajdog\\OneDrive\\Documents\\GitHub\\trains-plotting\\trainsplotting-cdk\\.env\\lib\\site-packages\\jsii\\_embedded\\jsii\\jsii-runtime.js:6666:26)",
