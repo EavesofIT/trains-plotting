@@ -38,11 +38,4 @@ class TrainsplottingCdkStack(core.Stack):
         )
         
         lambdaFn.add_event_source(lambdaevents.S3EventSource(bucket,events=[s3.EventType.OBJECT_CREATED]))
-        #bucket.add_event_notification(s3.EventType.OBJECT_CREATED,s3n.LambdaDestination(lambdaFn))
-        #ingestiontopic.add_subscription()
-        #lambdaevents.S3EventSource(bucket,) ------ Runs, doesn't work
-        #bucket.addEventNotification(s3.EventType.OBJECT_CREATED,) ----- Closeish, can't get the second or third object references to work
-        #rule.add_target(targets.LambdaFunction(lambdaFn))
-        #bucket.add_target(targets.LambdaFunction(lambdaFn))
-        #bucket.add_event_notification(s3.EventType.OBJECT_CREATED,'photo-ingestion','*')
-        #bucket.addEventNotification(s3.EventType.OBJECT_CREATED_PUT, s3n.LambdaDestination(topic)) https://docs.aws.amazon.com/cdk/api/latest/python/aws_cdk.aws_s3_notifications.html
+        
