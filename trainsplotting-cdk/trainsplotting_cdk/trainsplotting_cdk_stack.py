@@ -18,14 +18,29 @@ class TrainsplottingCdkStack(core.Stack):
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL
         )
 
+        #**********#
+        # Could add another bucket here and add the zip of the code to use in Lambda functions
+        #**********#
+
         with open("lambda_handlers/photo-ingestion.py", encoding="utf8") as fp:
             photoingestion_code = fp.read()
         
         lambdaFn = lambda_.Function(
             self, "photo-ingestion",
+            #code=lambda_.cfn_parameters or lambda_.bucket may need to be used if code is bigger than 4KiB
             code=lambda_.InlineCode(photoingestion_code),
             handler="index.main",
             timeout=core.Duration.seconds(300),
             runtime=lambda_.Runtime.PYTHON_3_7,
         )
         
+        rule = events.Rule(
+            self, "Rule",
+            schedule=events.Schedule.cron(
+                minute='0',
+                hour='18',
+                month='*',
+                week_day='MON-FRI',
+                year='*'),
+        )
+        rule.add_target(targets.LambdaFunction(lambdaFn))
