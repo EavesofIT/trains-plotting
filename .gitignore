@@ -114,3 +114,4 @@ dmypy.json
 .pyre/
 .vscode/settings.json
 trainsplotting_ws.code-workspace
+trainsplotting-cdk/cdk.out/manifest.json
