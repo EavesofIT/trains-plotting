@@ -1,0 +1,19 @@
+{
+  "version": "0.36.0",
+  "artifacts": {
+    "trainsplotting-cdk": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "trainsplotting-cdk.template.json"
+      }
+    }
+  },
+  "runtime": {
+    "libraries": {
+      "@aws-cdk/cx-api": "1.3.0",
+      "@aws-cdk/core": "1.3.0",
+      "jsii-runtime": "Python/3.7.4"
+    }
+  }
+}
