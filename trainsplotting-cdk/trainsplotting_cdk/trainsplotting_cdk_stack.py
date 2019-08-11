@@ -18,7 +18,7 @@ class TrainsplottingCdkStack(core.Stack):
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL
         )
 
-        with open("photo-ingestion.py", encoding="utf8") as fp:
+        with open("lambda_handlers/photo-ingestion.py", encoding="utf8") as fp:
             photoingestion_code = fp.read()
         
         lambdaFn = lambda_.Function(
