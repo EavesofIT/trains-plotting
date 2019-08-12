@@ -71,4 +71,6 @@ class TrainsplottingCdkStack(core.Stack):
         # Add permission to publish to SNS for processing results
         photoIngestFn.add_to_role_policy(iam.PolicyStatement(actions=['sns:Publish'],resources=[resultstopic.topic_arn]))
         # Add permission to get object from the bucket
-        photoIngestFn.add_to_role_policy(iam.PolicyStatement(actions=['s3:GetObject'],resources=[bucket.bucket_arn]))
+        bucketObjectsPath = bucket.bucket_arn + "/*"
+        photoIngestFn.add_to_role_policy(iam.PolicyStatement(actions=['s3:GetObject'],resources=[bucketObjectsPath]))
+        photoIngestFn.add_to_role_policy(iam.PolicyStatement(actions=['rekognition:DetectText','rekognition:DetectLabels','rekognition:DetectModerationLabels'],resources=['*']))
