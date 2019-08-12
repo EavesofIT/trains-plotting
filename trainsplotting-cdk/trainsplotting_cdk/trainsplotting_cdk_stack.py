@@ -6,7 +6,8 @@ from aws_cdk import (
     aws_lambda as lambda_,
     aws_events_targets as targets,
     aws_lambda_event_sources as lambdaevents,
-    aws_sns as sns
+    aws_sns as sns,
+    aws_iam as iam
 )
 
 
@@ -25,22 +26,6 @@ class TrainsplottingCdkStack(core.Stack):
         #**********#
         # Could add another bucket here and add the zip of the code to use in Lambda functions
         #**********#
-
-        with open("lambda_handlers/photo-ingestion.py", encoding="utf8") as fp:
-            photoingestion_code = fp.read()
-        
-        # Creation of lambda function to process new images and kick of rekognition
-        photoIngestFn = lambda_.Function(
-            self, "photo-ingestion",
-            #code=lambda_.cfn_parameters or lambda_.bucket may need to be used if code is bigger than 4KiB
-            code=lambda_.InlineCode(photoingestion_code),
-            handler="index.main",
-            timeout=core.Duration.seconds(150),
-            runtime=lambda_.Runtime.PYTHON_3_7,
-            memory_size=256
-        )
-        # Adding S3 event notification for Lambda function
-        photoIngestFn.add_event_source(lambdaevents.S3EventSource(bucket,events=[s3.EventType.OBJECT_CREATED]))
 
         # Read code for processing rekognition results
         with open("lambda_handlers/process-rekog-results.py", encoding="utf8") as fp:
@@ -64,3 +49,22 @@ class TrainsplottingCdkStack(core.Stack):
 
         # Subscribe the lambda function to the SNS topic that Rekognition will use to publish finished results
         rekogResultsFn.add_event_source(lambdaevents.SnsEventSource(resultstopic))
+
+
+        with open("lambda_handlers/photo-ingestion.py", encoding="utf8") as fp:
+            photoingestion_code = fp.read()
+        
+        # Creation of lambda function to process new images and kick of rekognition
+        photoIngestFn = lambda_.Function(
+            self, "photo-ingestion",
+            #code=lambda_.cfn_parameters or lambda_.bucket may need to be used if code is bigger than 4KiB
+            code=lambda_.InlineCode(photoingestion_code),
+            handler="index.main",
+            timeout=core.Duration.seconds(150),
+            runtime=lambda_.Runtime.PYTHON_3_7,
+            memory_size=256
+        )
+        # Adding S3 event notification for Lambda function
+        photoIngestFn.add_event_source(lambdaevents.S3EventSource(bucket,events=[s3.EventType.OBJECT_CREATED]))
+        # Add permission to publish to SNS for processing results
+        photoIngestFn.add_to_role_policy(iam.PolicyStatement(actions=['sns:Publish'],resources=[resultstopic.topic_arn]))
