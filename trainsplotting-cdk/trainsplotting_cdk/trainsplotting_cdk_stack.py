@@ -64,7 +64,11 @@ class TrainsplottingCdkStack(core.Stack):
             runtime=lambda_.Runtime.PYTHON_3_7,
             memory_size=256
         )
+        # Add environment variable for the SNS Topic
+        photoIngestFn.add_environment(key='TOPIC_ARN',value=resultstopic.topic_arn)
         # Adding S3 event notification for Lambda function
         photoIngestFn.add_event_source(lambdaevents.S3EventSource(bucket,events=[s3.EventType.OBJECT_CREATED]))
         # Add permission to publish to SNS for processing results
         photoIngestFn.add_to_role_policy(iam.PolicyStatement(actions=['sns:Publish'],resources=[resultstopic.topic_arn]))
+        # Add permission to get object from the bucket
+        photoIngestFn.add_to_role_policy(iam.PolicyStatement(actions=['s3:GetObject'],resources=[bucket.bucket_arn]))
