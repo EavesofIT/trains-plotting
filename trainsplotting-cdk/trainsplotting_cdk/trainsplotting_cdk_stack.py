@@ -35,16 +35,12 @@ class TrainsplottingCdkStack(core.Stack):
             #code=lambda_.cfn_parameters or lambda_.bucket may need to be used if code is bigger than 4KiB
             code=lambda_.InlineCode(photoingestion_code),
             handler="index.main",
-            timeout=core.Duration.seconds(300),
+            timeout=core.Duration.seconds(150),
             runtime=lambda_.Runtime.PYTHON_3_7,
+            memory_size=256
         )
         # Adding S3 event notification for Lambda function
         photoIngestFn.add_event_source(lambdaevents.S3EventSource(bucket,events=[s3.EventType.OBJECT_CREATED]))
-
-        # SNS Topic for Rekognition to publish to when completed
-        resultstopic = sns.Topic(
-            display_name='rekognition-results-topic'
-        )
 
         # Read code for processing rekognition results
         with open("lambda_handlers/process-rekog-results.py", encoding="utf8") as fp:
@@ -56,9 +52,15 @@ class TrainsplottingCdkStack(core.Stack):
             #code=lambda_.cfn_parameters or lambda_.bucket may need to be used if code is bigger than 4KiB
             code=lambda_.InlineCode(rekogresults_code),
             handler="index.main",
-            timeout=core.Duration.seconds(300),
+            timeout=core.Duration.seconds(150),
             runtime=lambda_.Runtime.PYTHON_3_7,
+            memory_size=256
+        )
+
+        # SNS Topic for Rekognition to publish to when completed
+        resultstopic = sns.Topic(self,'rekognition-results-topic',
+            display_name='rekognition-results-topic'
         )
 
         # Subscribe the lambda function to the SNS topic that Rekognition will use to publish finished results
-        photoIngestFn.add_event_source(lambdaevents.SnsEventSource(resultstopic))
+        rekogResultsFn.add_event_source(lambdaevents.SnsEventSource(resultstopic))
