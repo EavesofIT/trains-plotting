@@ -7,7 +7,8 @@ from aws_cdk import (
     aws_events_targets as targets,
     aws_lambda_event_sources as lambdaevents,
     aws_sns as sns,
-    aws_iam as iam
+    aws_iam as iam,
+    aws_dynamodb as dynamo
 )
 
 
@@ -20,7 +21,7 @@ class TrainsplottingCdkStack(core.Stack):
         bucket = s3.Bucket(self, 
             "trainsplotting-ingestion",
             encryption=s3.BucketEncryption.S3_MANAGED,
-            block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
+            block_public_access=s3.BlockPublicAccess.BLOCK_ALL
         )
 
         #**********#
@@ -74,3 +75,12 @@ class TrainsplottingCdkStack(core.Stack):
         bucketObjectsPath = bucket.bucket_arn + "/*"
         photoIngestFn.add_to_role_policy(iam.PolicyStatement(actions=['s3:GetObject'],resources=[bucketObjectsPath]))
         photoIngestFn.add_to_role_policy(iam.PolicyStatement(actions=['rekognition:DetectText','rekognition:DetectLabels','rekognition:DetectModerationLabels'],resources=['*']))
+
+        # Create DynamoDB table to contain JSON body returned by Rekognition
+        partionKeySerialNumber = dynamo.Attribute(
+            name="serial_number",
+            type=dynamo.AttributeType.STRING
+        )
+        dynamo.Table(self, "rekogitionResultsDB",
+            partition_key=partionKeySerialNumber
+        )
