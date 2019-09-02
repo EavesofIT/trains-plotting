@@ -84,3 +84,15 @@ class TrainsplottingCdkStack(core.Stack):
         dynamo.Table(self, "rekogitionResultsDB",
             partition_key=partionKeySerialNumber
         )
+        
+        # Add permission for the Lambda function to 
+        rekogResultsFn.add_to_role_policy(iam.PolicyStatement(actions=[
+				"dynamodb:BatchGetItem",
+				"dynamodb:GetItem",
+				"dynamodb:Query",
+				"dynamodb:Scan",
+				"dynamodb:BatchWriteItem",
+				"dynamodb:PutItem",
+				"dynamodb:UpdateItem"
+			],resources=[rekogResultsFn.function_arn])
+        )
