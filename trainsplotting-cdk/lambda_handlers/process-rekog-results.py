@@ -5,8 +5,10 @@ def main(event, context):
     print("I'm running!")
     print("Add code to process Rekognition results and tag pictures!")
     print(event)
+    
     #
-    # Put the event over to the DynamoDB
+    # Sort Rekognition results by confidence
+    # We are looking for a 1-4 letter by 4-6 number "word" or two separate values with high confidence(>90)
     #
 
     # Remove spaces from the text when validating regex to see if it is the serial number
