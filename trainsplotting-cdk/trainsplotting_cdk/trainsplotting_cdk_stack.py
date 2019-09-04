@@ -8,7 +8,8 @@ from aws_cdk import (
     aws_lambda_event_sources as lambdaevents,
     aws_sns as sns,
     aws_iam as iam,
-    aws_dynamodb as dynamo
+    aws_dynamodb as dynamo,
+    aws_rds as rds
 )
 
 
@@ -24,6 +25,7 @@ class TrainsplottingCdkStack(core.Stack):
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL
         )
 
+
         #**********#
         # Could add another ingestion_bucket here and add the zip of the code to use in Lambda functions
         #**********#
@@ -35,7 +37,7 @@ class TrainsplottingCdkStack(core.Stack):
 
         # Creation of lambda function to process results of rekognition
         rekog_results_fn = lambda_.Function(
-            self, "rekognition-results",
+            self, "trainsplotting-rekognition-results",
             code=lambda_.InlineCode(rekogresults_code),
             handler="index.main",
             timeout=core.Duration.seconds(150),
@@ -44,7 +46,7 @@ class TrainsplottingCdkStack(core.Stack):
         )
 
         # SNS Topic for Rekognition to publish to when completed
-        rekog_results_snstopic = sns.Topic(self,'rekognition-results-topic',
+        rekog_results_snstopic = sns.Topic(self,'trainsplotting-rekognition-results-topic',
             display_name='rekognition-results-topic'
         )
 
@@ -55,9 +57,10 @@ class TrainsplottingCdkStack(core.Stack):
         with open(proc_photo_ingestion_filepath, encoding="utf8") as file_process_photo_ingestion:
             photoingestion_code = file_process_photo_ingestion.read()
 
+
         # Creation of lambda function to process new images and kick of rekognition
         photo_ingest_fn = lambda_.Function(
-            self, "photo-ingestion",
+            self, "trainsplotting-photo-ingestion",
             #code=lambda_.cfn_parameters or lambda_.ingestion_bucket may need to be used if code is bigger than 4KiB
             code=lambda_.InlineCode(photoingestion_code),
             handler="index.main",
@@ -76,30 +79,35 @@ class TrainsplottingCdkStack(core.Stack):
         photo_ingest_fn.add_to_role_policy(iam.PolicyStatement(actions=['s3:GetObject'],resources=[bucket_objects_path]))
         photo_ingest_fn.add_to_role_policy(iam.PolicyStatement(actions=['rekognition:DetectText','rekognition:DetectLabels','rekognition:DetectModerationLabels'],resources=['*']))
 
-        # Create DynamoDB table to contain JSON body returned by Rekognition
-        partion_key_serial_number = dynamo.Attribute(
-            name="serial_number",
-            type=dynamo.AttributeType.STRING
+
+        # Create Aurora RDS table for recording of railcar inspection data
+        # Add SSM parameter store of encrypted password
+        railcar_inspection_table = rds.CfnDBCluster(
+            self, "trainsplotting-railcar-inspection",
+            master_username="trainsplottingadminuser",
+            master_user_password="b*bsuruncl3",
+            engine="aurora",
+            scaling_configuration={"min_capactiy" : 1, "max_capacity" : 4},
+            engine_mode="serverless",
+            storage_encrypted=True,
+            port=3306
         )
-        rekog_results_table = dynamo.Table(self, "rekogitionResultsDB",
-            partition_key=partion_key_serial_number
-        )
+        #attr_endpoint_address
+        #attr_endpoint_port
+        #database_name
+
         
-        # Add permission for the Lambda function to putitems in the DynamoDB used to store the results from Rekog
-        rekog_results_fn.add_to_role_policy(iam.PolicyStatement(
-            actions=[
-                #"dynamodb:BatchGetItem",
-                #"dynamodb:GetItem",
-                #"dynamodb:Query",
-                #"dynamodb:Scan",
-                "dynamodb:BatchWriteItem",
-                "dynamodb:PutItem"
-                #"dynamodb:UpdateItem"
-            ],
-            resources=[rekog_results_fn.function_arn])
-        )
         # Add the environment variable with the DynamoDB name to the Rekognition results function
-        rekog_results_fn.add_environment(key='DYNAMODB_NAME', value=rekog_results_table.table_name)
+        rekog_results_fn.add_environment(key='database_name', value=railcar_inspection_table.database_name)
+
+
+        # Create S3 bucket for Sagemaker Results storage
+        sagemaker_results_bucket = s3.Bucket(self,
+            "trainsplotting-sagemaker-results",
+            encryption=s3.BucketEncryption.S3_MANAGED,
+            block_public_access=s3.BlockPublicAccess.BLOCK_ALL
+        )
+
 
         # Create an SNS topic for our lambda functions to handle the inspection item processing
         inspection_event_snstopic = sns.Topic(self,'inspection_event_snstopic',
