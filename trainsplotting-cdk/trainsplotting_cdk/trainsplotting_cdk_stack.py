@@ -44,12 +44,12 @@ class TrainsplottingCdkStack(core.Stack):
         )
 
         # SNS Topic for Rekognition to publish to when completed
-        results_topic = sns.Topic(self,'rekognition-results-topic',
+        rekog_results_snstopic = sns.Topic(self,'rekognition-results-topic',
             display_name='rekognition-results-topic'
         )
 
         # Subscribe the lambda function to the SNS topic that Rekognition will use to publish finished results
-        rekog_results_fn.add_event_source(lambdaevents.SnsEventSource(results_topic))
+        rekog_results_fn.add_event_source(lambdaevents.SnsEventSource(rekog_results_snstopic))
 
         proc_photo_ingestion_filepath = "lambda_handlers/photo-ingestion.py"
         with open(proc_photo_ingestion_filepath, encoding="utf8") as file_process_photo_ingestion:
@@ -66,11 +66,11 @@ class TrainsplottingCdkStack(core.Stack):
             memory_size=256
         )
         # Add environment variable for the SNS Topic
-        photo_ingest_fn.add_environment(key='TOPIC_ARN',value=results_topic.topic_arn)
+        photo_ingest_fn.add_environment(key='TOPIC_ARN',value=rekog_results_snstopic.topic_arn)
         # Adding S3 event notification for Lambda function
         photo_ingest_fn.add_event_source(lambdaevents.S3EventSource(ingestion_bucket,events=[s3.EventType.OBJECT_CREATED]))
         # Add permission to publish to SNS for processing results
-        photo_ingest_fn.add_to_role_policy(iam.PolicyStatement(actions=['sns:Publish'],resources=[results_topic.topic_arn]))
+        photo_ingest_fn.add_to_role_policy(iam.PolicyStatement(actions=['sns:Publish'],resources=[rekog_results_snstopic.topic_arn]))
         # Add permission to get object from the ingestion_bucket
         bucket_objects_path = ingestion_bucket.bucket_arn + "/*"
         photo_ingest_fn.add_to_role_policy(iam.PolicyStatement(actions=['s3:GetObject'],resources=[bucket_objects_path]))
@@ -98,5 +98,14 @@ class TrainsplottingCdkStack(core.Stack):
             ],
             resources=[rekog_results_fn.function_arn])
         )
-
+        # Add the environment variable with the DynamoDB name to the Rekognition results function
         rekog_results_fn.add_environment(key='DYNAMODB_NAME', value=rekog_results_table.table_name)
+
+        # Create an SNS topic for our lambda functions to handle the inspection item processing
+        inspection_event_snstopic = sns.Topic(self,'inspection_event_snstopic',
+            display_name='inspection_event_snstopic'
+        )
+        # Add permission to publish to SNS for inspection item processing
+        photo_ingest_fn.add_to_role_policy(iam.PolicyStatement(actions=['sns:Publish'],resources=[inspection_event_snstopic.topic_arn]))
+        # Add environment variable for the SNS Topic
+        rekog_results_fn.add_environment(key='TOPIC_ARN',value=inspection_event_snstopic.topic_arn)
