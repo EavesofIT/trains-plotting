@@ -113,5 +113,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .vscode/settings.json
+trains-plotting/trainsplotting-cdk/cdk.out/
 trainsplotting_ws.code-workspace
 trainsplotting-cdk/cdk.out/manifest.json
