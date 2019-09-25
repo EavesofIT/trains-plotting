@@ -84,7 +84,7 @@ class TrainsplottingCdkStack(core.Stack):
         # Add SSM parameter store of encrypted password
         railcar_inspection_table = rds.CfnDBCluster(
             self, "trainsplotting-railcar-inspection",
-            master_username="trainsplottingadminuser",
+            master_username="trainsplottingad",
             master_user_password="b*bsuruncl3",
             engine="aurora",
             scaling_configuration={"min_capactiy" : 1, "max_capacity" : 4},
