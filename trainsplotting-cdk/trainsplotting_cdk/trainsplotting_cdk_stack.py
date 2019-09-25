@@ -31,7 +31,7 @@ class TrainsplottingCdkStack(core.Stack):
         #**********#
 
         # Read code for processing rekognition results
-        proc_results_filepath = "lambda_handlers/process-rekog-results.py"
+        proc_results_filepath = "artifacts/lambda_handlers/process-rekog-results.py"
         with open(proc_results_filepath, encoding="utf8") as file_process_results_process:
             rekogresults_code = file_process_results_process.read()
 
@@ -53,7 +53,7 @@ class TrainsplottingCdkStack(core.Stack):
         # Subscribe the lambda function to the SNS topic that Rekognition will use to publish finished results
         rekog_results_fn.add_event_source(lambdaevents.SnsEventSource(rekog_results_snstopic))
 
-        proc_photo_ingestion_filepath = "lambda_handlers/photo-ingestion.py"
+        proc_photo_ingestion_filepath = "artifacts/lambda_handlers/photo-ingestion.py"
         with open(proc_photo_ingestion_filepath, encoding="utf8") as file_process_photo_ingestion:
             photoingestion_code = file_process_photo_ingestion.read()
 
