@@ -29,6 +29,7 @@ phases:
       - cdk synth
       # - cfn_nag the CF template to ensure no issues
       - ls
+      - cat cdk.json
       - cdk list
       - cdk deploy --require-approval="never"
   #post_build:
