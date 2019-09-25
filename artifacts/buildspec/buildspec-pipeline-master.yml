@@ -28,6 +28,8 @@ phases:
       #- cd trainsplotting_cdk
       - cdk synth
       # - cfn_nag the CF template to ensure no issues
+      - ls
+      - cdk list
       - cdk deploy --require-approval="never"
   #post_build:
     #commands:
