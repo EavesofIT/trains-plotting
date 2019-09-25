@@ -31,7 +31,7 @@ phases:
       - ls
       - cat cdk.json
       - cdk list
-      - cdk destroy --require-approval="never"
+      - cdk deploy --require-approval="never"
   #post_build:
     #commands:
       # - command
