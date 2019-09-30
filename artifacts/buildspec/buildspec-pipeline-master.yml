@@ -26,7 +26,7 @@ phases:
   build:
     commands:
       #- cd trainsplotting_cdk
-      - cdk synth
+      #- cdk synth
       # - cfn_nag the CF template to ensure no issues
       - ls
       - cat cdk.json
