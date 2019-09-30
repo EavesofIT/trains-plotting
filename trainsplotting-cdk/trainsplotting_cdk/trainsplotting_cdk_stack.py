@@ -1,5 +1,6 @@
 from aws_cdk import (
     core,
+    aws_ec2 as ec2,
     aws_s3 as s3,
     aws_s3_notifications as s3n,
     aws_events as events,
@@ -99,6 +100,24 @@ class TrainsplottingCdkStack(core.Stack):
         
         # Add the environment variable with the DynamoDB name to the Rekognition results function
         rekog_results_fn.add_environment(key='database_name', value=railcar_inspection_table.database_name)
+        rekog_results_fn.add_environment(key='db_endpoint_address', value=railcar_inspection_table.attr_endpoint_address)
+        rekog_results_fn.add_environment(key='db_endpoint_port', value=railcar_inspection_table.attr_endpoint_port)
+        # Create VPC, subnets, and security groups
+        trainsplotting_vpc = ec2.Vpc(self,'trainsplotting-vpc',
+            cidr='10.0.0.1/21',
+            max_azs=2,
+            subnet_configuration=[
+                {"subnetType": ec2.SubnetType.PRIVATE,"name" : "application", "cidr_mask" : 24}
+                ]
+        )
+        trainsplotting_sg = ec2.SecurityGroup(self,"trainsplotting-app-sg",
+            vpc=trainsplotting_vpc
+        )
+        #trainsplotting_sg.add_ingress_rule(peer=ec2.Peer.any_ipv4, connection=railcar_inspection_table.attr_endpoint_port, description="This allows access for the Lambda to reach the RDS")
+        trainsplotting_sg_connections = ec2.Connections()
+        trainsplotting_sg_connections.add_security_group(trainsplotting_sg)
+        #trainsplotting_sg_connections.allow_internally(port_range=ec2.Port(protocol=ec2.Protocol.TCP,string_representation="string",to_port=(railcar_inspection_table.attr_endpoint_port))
+        
 
 
         # Create S3 bucket for Sagemaker Results storage

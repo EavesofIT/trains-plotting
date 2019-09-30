@@ -22,12 +22,8 @@ def main(event, context):
     # m.group(2) = 50757
     # m.group(2)[1] = 0
 
-    dynamodb = boto3.client('dynamodb')
-    dynamodb.put_item(
-        TableName='',
-        Item={}
-    )
-    
+    # Connect to RDS DB here
+
     # 
     # Send the event to the next lambda which should start the deeper analysis for inspection points, after successfully storing in DynamoDB
     #
