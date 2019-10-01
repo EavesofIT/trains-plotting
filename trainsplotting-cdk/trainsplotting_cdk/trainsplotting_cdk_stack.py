@@ -98,7 +98,7 @@ class TrainsplottingCdkStack(core.Stack):
         #database_name
 
         print("Look here")
-        print(railcar_inspection_table.get_att("database_name"))
+        print(railcar_inspection_table.get_att("database_name").to_string())
         print("Look above")
         # Add the environment variable with the DynamoDB name to the Rekognition results function
         rekog_results_fn.add_environment(key='database_name', value=railcar_inspection_table.database_name)
