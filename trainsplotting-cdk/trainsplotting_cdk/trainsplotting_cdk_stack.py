@@ -104,7 +104,7 @@ class TrainsplottingCdkStack(core.Stack):
         #rekog_results_fn.add_environment(key='db_endpoint_port', value=railcar_inspection_table.attr_endpoint_port)
         # Create VPC, subnets, and security groups
         trainsplotting_vpc = ec2.Vpc(self,'trainsplotting-vpc',
-            cidr='10.0.0.1/21',
+            cidr='10.0.0.0/21',
             max_azs=2,
             subnet_configuration=[
                 {"subnetType": ec2.SubnetType.PRIVATE,"name" : "application", "cidr_mask" : 22}
