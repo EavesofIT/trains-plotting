@@ -99,9 +99,9 @@ class TrainsplottingCdkStack(core.Stack):
 
         
         # Add the environment variable with the DynamoDB name to the Rekognition results function
-        rekog_results_fn.add_environment(key='database_name', value=railcar_inspection_table.database_name)
-        rekog_results_fn.add_environment(key='db_endpoint_address', value=railcar_inspection_table.attr_endpoint_address)
-        rekog_results_fn.add_environment(key='db_endpoint_port', value=railcar_inspection_table.attr_endpoint_port)
+        #rekog_results_fn.add_environment(key='database_name', value=railcar_inspection_table.database_name)
+        #rekog_results_fn.add_environment(key='db_endpoint_address', value=railcar_inspection_table.attr_endpoint_address)
+        #rekog_results_fn.add_environment(key='db_endpoint_port', value=railcar_inspection_table.attr_endpoint_port)
         # Create VPC, subnets, and security groups
         trainsplotting_vpc = ec2.Vpc(self,'trainsplotting-vpc',
             cidr='10.0.0.1/21',
