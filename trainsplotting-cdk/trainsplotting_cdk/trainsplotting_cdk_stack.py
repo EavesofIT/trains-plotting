@@ -101,9 +101,10 @@ class TrainsplottingCdkStack(core.Stack):
         
         # Create Aurora RDS table for recording of railcar inspection data
         # Add SSM parameter store of encrypted password
+        db_user_name = "trainsplottingad"
         railcar_inspection_table = rds.DatabaseInstance(
             self, "trainsplotting-railcar-inspection",
-            master_username="trainsplottingad",
+            master_username=db_user_name,
             engine=rds.DatabaseInstanceEngine.MYSQL,
             instance_class=ec2.InstanceType("t2.small"),
             vpc=trainsplotting_vpc,
@@ -111,18 +112,19 @@ class TrainsplottingCdkStack(core.Stack):
             storage_encrypted=True,
             port=3306,
             vpc_placement=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
+            #instance_identifier="someusefulname"
             #vpc_security_group_ids=[trainsplotting_sg.security_group_id]
         )
-        #attr_endpoint_address
-        #attr_endpoint_port
-        #database_name
 
+        # Grant read access to the lambda function to read the rds secret
+        railcar_inspection_table.secret.grant_read(rekog_results_fn.role)
 
         # Add the environment variable with the DynamoDB name to the Rekognition results function
         #rekog_results_fn.add_environment(key='database_name', value=railcar_inspection_table.database_name)
-        #rekog_results_fn.add_environment(key='db_endpoint_address', value=railcar_inspection_table.attr_endpoint_address)
-        #rekog_results_fn.add_environment(key='db_endpoint_port', value=railcar_inspection_table.attr_endpoint_port)
-        #rekog_results_fn.add_environment(key='db_endpoint_test', value=railcar_inspection_table.attr_endpoint_port)
+        rekog_results_fn.add_environment(key='db_endpoint_address', value=railcar_inspection_table.db_instance_endpoint_address)
+        rekog_results_fn.add_environment(key='db_endpoint_port', value=railcar_inspection_table.db_instance_endpoint_port)
+        rekog_results_fn.add_environment(key='db_user_name', value=db_user_name)
+        rekog_results_fn.add_environment(key='db_secret_arn', value=railcar_inspection_table.secret.secret_arn)
 
 
 
