@@ -101,13 +101,10 @@ class TrainsplottingCdkStack(core.Stack):
 
 
 
-        print("Look here")
-        print(railcar_inspection_table.get_att("attr_endpoint_address").to_string())
-        print("Look above")
         # Add the environment variable with the DynamoDB name to the Rekognition results function
         #rekog_results_fn.add_environment(key='database_name', value=railcar_inspection_table.database_name)
-        rekog_results_fn.add_environment(key='db_endpoint_address', value=railcar_inspection_table.attr_endpoint_address)
-        rekog_results_fn.add_environment(key='db_endpoint_port', value=railcar_inspection_table.attr_endpoint_port)
+        #rekog_results_fn.add_environment(key='db_endpoint_address', value=railcar_inspection_table.attr_endpoint_address)
+        #rekog_results_fn.add_environment(key='db_endpoint_port', value=railcar_inspection_table.attr_endpoint_port)
 
 
 
