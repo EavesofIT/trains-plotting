@@ -105,7 +105,7 @@ class TrainsplottingCdkStack(core.Stack):
             self, "trainsplotting-railcar-inspection",
             master_username="trainsplottingad",
             engine=rds.DatabaseInstanceEngine.MYSQL,
-            instance_class=ec2.InstanceType("db.t2.small"),
+            instance_class=ec2.InstanceType("t2.small"),
             vpc=trainsplotting_vpc,
             allocated_storage=100,
             storage_encrypted=True,
