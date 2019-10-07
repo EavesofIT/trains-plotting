@@ -98,7 +98,24 @@ class TrainsplottingCdkStack(core.Stack):
         trainsplotting_sg_connections.add_security_group(trainsplotting_sg)
         #trainsplotting_sg_connections.allow_internally(port_range=ec2.Port(protocol=ec2.Protocol.TCP,string_representation="string",to_port=(railcar_inspection_table.attr_endpoint_port))
         
-
+        
+        # Create Aurora RDS table for recording of railcar inspection data
+        # Add SSM parameter store of encrypted password
+        railcar_inspection_table = rds.DatabaseInstance(
+            self, "trainsplotting-railcar-inspection",
+            master_username="trainsplottingad",
+            engine=rds.DatabaseInstanceEngine.MYSQL,
+            instance_class=ec2.InstanceType("db.t2.small"),
+            vpc=trainsplotting_vpc,
+            allocated_storage=100,
+            storage_encrypted=True,
+            port=3306,
+            vpc_placement=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
+            #vpc_security_group_ids=[trainsplotting_sg.security_group_id]
+        )
+        #attr_endpoint_address
+        #attr_endpoint_port
+        #database_name
 
 
         # Add the environment variable with the DynamoDB name to the Rekognition results function
