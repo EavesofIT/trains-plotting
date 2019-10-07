@@ -109,7 +109,7 @@ class TrainsplottingCdkStack(core.Stack):
             engine_mode="serverless",
             storage_encrypted=True,
             port=3306,
-            vpc_security_group_ids=[trainsplotting_sg.security_group_id]
+            #vpc_security_group_ids=[trainsplotting_sg.security_group_id]
         )
         #attr_endpoint_address
         #attr_endpoint_port
