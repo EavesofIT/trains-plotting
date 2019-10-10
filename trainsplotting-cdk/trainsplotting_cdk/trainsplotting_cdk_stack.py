@@ -126,7 +126,23 @@ class TrainsplottingCdkStack(core.Stack):
         rekog_results_fn.add_environment(key='db_user_name', value=db_user_name)
         rekog_results_fn.add_environment(key='db_secret_arn', value=railcar_inspection_table.secret.secret_arn)
 
-
+        # Create Machine Image
+        trainsplotting_app_machineimage = ec2.AmazonLinuxImage(
+            generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX,
+            edition=ec2.AmazonLinuxEdition.STANDARD,
+            virtualization=ec2.AmazonLinuxVirt.HVM,
+            storage=ec2.AmazonLinuxStorage.GENERAL_PURPOSE,
+        )
+        # Create instance profile with permission to put object to the s3 bucket and get the secret
+        
+        # Create the trainsplotting app instance
+        trainsplotting_app_ec2 = ec2.Instance(self, "trainsplotting-app"
+            instance_type=ec2.InstanceType("t2.small"),
+            machine_image=trainsplotting_app_machineimage,
+            vpc=trainsplotting_vpc,
+            security_group=railcar_inspection_table.security_group_id,
+            #role=,
+        )
 
         # Create S3 bucket for Sagemaker Results storage
         sagemaker_results_bucket = s3.Bucket(self,
