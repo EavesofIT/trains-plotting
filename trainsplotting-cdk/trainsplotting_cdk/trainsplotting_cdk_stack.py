@@ -120,7 +120,7 @@ class TrainsplottingCdkStack(core.Stack):
             security_group_id=railcar_inspection_table.security_group_id
         )
         trainsplotting_sg_connections.add_security_group(trainsplotting_rds_sg)
-        trainsplotting_sg_connections.allow_internally(ec2.Port(protocol=ec2.Protocol.TCP,string_representation="string",to_port=railcar_inspection_table.attr_endpoint_port))
+        trainsplotting_sg_connections.allow_internally(ec2.Port(protocol=ec2.Protocol.TCP,string_representation="string",to_port=railcar_inspection_table.db_instance_endpoint_port))
 
         # Grant read access to the lambda function to read the rds secret
         railcar_inspection_table.secret.grant_read(rekog_results_fn.role)
