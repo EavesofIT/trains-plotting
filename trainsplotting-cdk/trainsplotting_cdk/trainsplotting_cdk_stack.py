@@ -87,9 +87,7 @@ class TrainsplottingCdkStack(core.Stack):
             max_azs=2,
             nat_gateways=0,
             subnet_configuration=[
-                {"subnetType": ec2.SubnetType.PUBLIC,"name" : "web", "cidr_mask" : 24},
-                {"subnetType": ec2.SubnetType.PRIVATE,"name" : "app", "cidr_mask" : 24},
-                {"subnetType": ec2.SubnetType.ISOLATED,"name" : "data", "cidr_mask" : 24}
+                {"subnetType": ec2.SubnetType.ISOLATED,"name" : "application", "cidr_mask" : 22}
                 ]
         )
         trainsplotting_sg = ec2.SecurityGroup(self,"trainsplotting-app-sg",
@@ -149,7 +147,7 @@ class TrainsplottingCdkStack(core.Stack):
             machine_image=trainsplotting_app_machineimage,
             vpc=trainsplotting_vpc,
             security_group=trainsplotting_sg,
-            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE),
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
             #role=,
         )
         
