@@ -143,6 +143,7 @@ class TrainsplottingCdkStack(core.Stack):
             machine_image=trainsplotting_app_machineimage,
             vpc=trainsplotting_vpc,
             security_group=trainsplotting_sg,
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
             #role=,
         )
 
