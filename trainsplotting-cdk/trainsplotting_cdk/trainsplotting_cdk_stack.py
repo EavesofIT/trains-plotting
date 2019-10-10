@@ -115,6 +115,8 @@ class TrainsplottingCdkStack(core.Stack):
             #instance_identifier="someusefulname"
             #vpc_security_group_ids=[trainsplotting_sg.security_group_id]
         )
+        
+        # Add RDS security group to the ec2 Connection
 
         # Grant read access to the lambda function to read the rds secret
         railcar_inspection_table.secret.grant_read(rekog_results_fn.role)
@@ -126,7 +128,24 @@ class TrainsplottingCdkStack(core.Stack):
         rekog_results_fn.add_environment(key='db_user_name', value=db_user_name)
         rekog_results_fn.add_environment(key='db_secret_arn', value=railcar_inspection_table.secret.secret_arn)
 
-
+        # Create Machine Image
+        trainsplotting_app_machineimage = ec2.AmazonLinuxImage(
+            generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX,
+            edition=ec2.AmazonLinuxEdition.STANDARD,
+            virtualization=ec2.AmazonLinuxVirt.HVM,
+            storage=ec2.AmazonLinuxStorage.GENERAL_PURPOSE,
+        )
+        # Create instance profile with permission to put object to the s3 bucket and get the secret
+        
+        # Create the trainsplotting app instance
+        trainsplotting_app_ec2 = ec2.Instance(self, "trainsplotting-app",
+            instance_type=ec2.InstanceType("t2.small"),
+            machine_image=trainsplotting_app_machineimage,
+            vpc=trainsplotting_vpc,
+            security_group=trainsplotting_sg,
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
+            #role=,
+        )
 
         # Create S3 bucket for Sagemaker Results storage
         sagemaker_results_bucket = s3.Bucket(self,
