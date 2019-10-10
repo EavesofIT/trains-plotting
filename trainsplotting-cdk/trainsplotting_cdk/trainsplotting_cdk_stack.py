@@ -96,12 +96,12 @@ class TrainsplottingCdkStack(core.Stack):
         #trainsplotting_sg.add_ingress_rule(peer=ec2.Peer.any_ipv4, connection=railcar_inspection_table.attr_endpoint_port, description="This allows access for the Lambda to reach the RDS")
         trainsplotting_sg_connections = ec2.Connections()
         trainsplotting_sg_connections.add_security_group(trainsplotting_sg)
-        #trainsplotting_sg_connections.allow_internally(port_range=ec2.Port(protocol=ec2.Protocol.TCP,string_representation="string",to_port=(railcar_inspection_table.attr_endpoint_port))
         
         
         # Create Aurora RDS table for recording of railcar inspection data
         # Add SSM parameter store of encrypted password
         db_user_name = "trainsplottingad"
+        db_port = 3306
         railcar_inspection_table = rds.DatabaseInstance(
             self, "trainsplotting-railcar-inspection",
             master_username=db_user_name,
@@ -121,6 +121,7 @@ class TrainsplottingCdkStack(core.Stack):
             security_group_id=railcar_inspection_table.security_group_id
         )
         trainsplotting_sg_connections.add_security_group(trainsplotting_rds_sg)
+        trainsplotting_sg_connections.allow_internally(ec2.Port(protocol=ec2.Protocol.TCP,string_representation="3306",to_port=db_port))
 
         # Grant read access to the lambda function to read the rds secret
         railcar_inspection_table.secret.grant_read(rekog_results_fn.role)
