@@ -83,11 +83,14 @@ class TrainsplottingCdkStack(core.Stack):
 
         # Create VPC, subnets, and security groups
         trainsplotting_vpc = ec2.Vpc(self,'trainsplotting-vpc',
-            cidr='10.0.0.0/21',
+            cidr='10.0.8.0/21',
             max_azs=2,
             nat_gateways=0,
             subnet_configuration=[
-                {"subnetType": ec2.SubnetType.ISOLATED,"name" : "application", "cidr_mask" : 22}
+                {"subnetType": ec2.SubnetType.PUBLIC,"name" : "dmz", "cidr_mask" : 24},
+                {"subnetType": ec2.SubnetType.PUBLIC,"name" : "web", "cidr_mask" : 24},
+                {"subnetType": ec2.SubnetType.PRIVATE,"name" : "app", "cidr_mask" : 24},
+                {"subnetType": ec2.SubnetType.ISOLATED,"name" : "data", "cidr_mask" : 24}
                 ]
         )
         trainsplotting_sg = ec2.SecurityGroup(self,"trainsplotting-app-sg",
