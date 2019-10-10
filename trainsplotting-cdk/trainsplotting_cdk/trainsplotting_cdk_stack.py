@@ -96,6 +96,7 @@ class TrainsplottingCdkStack(core.Stack):
         #trainsplotting_sg.add_ingress_rule(peer=ec2.Peer.any_ipv4, connection=railcar_inspection_table.attr_endpoint_port, description="This allows access for the Lambda to reach the RDS")
         trainsplotting_sg_connections = ec2.Connections()
         trainsplotting_sg_connections.add_security_group(trainsplotting_sg)
+        trainsplotting_sg_connections.allow_default_port_internally()
         #trainsplotting_sg_connections.allow_internally(port_range=ec2.Port(protocol=ec2.Protocol.TCP,string_representation="string",to_port=(railcar_inspection_table.attr_endpoint_port))
         
         
