@@ -115,6 +115,8 @@ class TrainsplottingCdkStack(core.Stack):
             #instance_identifier="someusefulname"
             #vpc_security_group_ids=[trainsplotting_sg.security_group_id]
         )
+        
+        # Add RDS security group to the ec2 Connection
 
         # Grant read access to the lambda function to read the rds secret
         railcar_inspection_table.secret.grant_read(rekog_results_fn.role)
@@ -140,7 +142,7 @@ class TrainsplottingCdkStack(core.Stack):
             instance_type=ec2.InstanceType("t2.small"),
             machine_image=trainsplotting_app_machineimage,
             vpc=trainsplotting_vpc,
-            security_group=railcar_inspection_table.security_group_id,
+            security_group=trainsplotting_sg,
             #role=,
         )
 
