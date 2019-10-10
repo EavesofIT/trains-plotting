@@ -120,6 +120,7 @@ class TrainsplottingCdkStack(core.Stack):
         trainsplotting_rds_sg = ec2.SecurityGroup.from_security_group_id(self,"trainsplotting-rds-sg",
             security_group_id=railcar_inspection_table.security_group_id
         )
+        trainsplotting_sg_connections.add_security_group(trainsplotting_rds_sg)
 
         # Grant read access to the lambda function to read the rds secret
         railcar_inspection_table.secret.grant_read(rekog_results_fn.role)
