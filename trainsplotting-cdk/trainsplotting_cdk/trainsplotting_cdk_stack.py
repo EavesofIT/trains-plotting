@@ -136,7 +136,7 @@ class TrainsplottingCdkStack(core.Stack):
         # Create instance profile with permission to put object to the s3 bucket and get the secret
         
         # Create the trainsplotting app instance
-        trainsplotting_app_ec2 = ec2.Instance(self, "trainsplotting-app"
+        trainsplotting_app_ec2 = ec2.Instance(self, "trainsplotting-app",
             instance_type=ec2.InstanceType("t2.small"),
             machine_image=trainsplotting_app_machineimage,
             vpc=trainsplotting_vpc,
