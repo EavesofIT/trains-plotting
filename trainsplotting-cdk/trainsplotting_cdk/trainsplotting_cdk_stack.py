@@ -85,7 +85,7 @@ class TrainsplottingCdkStack(core.Stack):
         trainsplotting_vpc = ec2.Vpc(self,'trainsplotting-vpc',
             cidr='10.0.8.0/21',
             max_azs=2,
-            nat_gateways=0,
+            nat_gateways=1,
             subnet_configuration=[
                 {"subnetType": ec2.SubnetType.PUBLIC,"name" : "dmz", "cidr_mask" : 24},
                 {"subnetType": ec2.SubnetType.PUBLIC,"name" : "web", "cidr_mask" : 24},
