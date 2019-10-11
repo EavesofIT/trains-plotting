@@ -1,10 +1,13 @@
 import re
 import boto3
+import json
 
 def main(event, context):
     print("I'm running!")
     print("Add code to process Rekognition results and tag pictures!")
     print(event)
+    print("Message below")
+    print(event['Records'][0]['Sns']['Message'])
     
     #
     # Sort Rekognition results by confidence
