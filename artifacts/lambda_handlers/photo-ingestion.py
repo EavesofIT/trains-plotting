@@ -67,8 +67,8 @@ def main(event, context):
                 text_string = ",".join(all_texts)
                 
                 msg = msg + "\nImage : {0} , Labels Count : {1} , Labels Detected : {2} ".format(object_key, len(all_labels),labels_string )
-                msg = msg + "\nText Count: {0} , Text Detected : {1} ".format(len(all_texts), text_string)
-                msg = msg + "\nModeration Label: {0}".format(",".join(all_mod))
+                #msg = msg + "\nText Count: {0} , Text Detected : {1} ".format(len(all_texts), text_string)
+                #msg = msg + "\nModeration Label: {0}".format(",".join(all_mod))
                 
                 # log the output
                 print(msg)
