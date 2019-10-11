@@ -105,11 +105,20 @@ class TrainsplottingCdkStack(core.Stack):
         # Add SSM parameter store of encrypted password
         db_user_name = "trainsplottingad"
         db_port = 3306
+        railcar_inspection_table = rds.DatabaseInstance(
+            self, "trainsplotting-railcar-inspection",
+            master_username=db_user_name,
+            engine=rds.DatabaseInstanceEngine.MYSQL,
+            instance_class=ec2.InstanceType("t2.small"),
+            vpc=trainsplotting_vpc,
+            allocated_storage=100,
+            storage_encrypted=True,
+            port=3306,
+            vpc_placement=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
+            #instance_identifier="someusefulname"
+            #vpc_security_group_ids=[trainsplotting_sg.security_group_id]
+        )
 
-        #
-        ## Put DB code back here
-        #
-        
         # Add RDS security group to the ec2 Connection
         #trainsplotting_rds_sg = ec2.SecurityGroup.from_security_group_id(self,"trainsplotting-rds-sg", security_group_id=railcar_inspection_table.security_group_id)
         #trainsplotting_sg_connections.add_security_group(trainsplotting_rds_sg)
