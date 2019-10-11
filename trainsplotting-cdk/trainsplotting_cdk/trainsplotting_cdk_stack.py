@@ -93,12 +93,25 @@ class TrainsplottingCdkStack(core.Stack):
                 {"subnetType": ec2.SubnetType.ISOLATED,"name" : "data", "cidr_mask" : 24}
                 ]
         )
+        # Create trainsplotting security group
         trainsplotting_sg = ec2.SecurityGroup(self,"trainsplotting-app-sg",
             vpc=trainsplotting_vpc
         )
+        # Create trainsplotting web ssh login
+        trainsplotting_web_sg = ec2.SecurityGroup(self,"trainsplotting-web-sg",
+            vpc=trainsplotting_vpc
+        )
+        # Add ssh ingress
+        trainsplotting_web_sg.add_egress_rule(
+            peer=ec2.Peer.any_ipv4,
+            connection=ec2.Port(protocol=ec2.Protocol.TCP,string_representation="22",to_port=22),
+            description="This allows ssh into the web tier box"
+        )
+
         #trainsplotting_sg.add_ingress_rule(peer=ec2.Peer.any_ipv4, connection=railcar_inspection_table.attr_endpoint_port, description="This allows access for the Lambda to reach the RDS")
         trainsplotting_sg_connections = ec2.Connections()
         trainsplotting_sg_connections.add_security_group(trainsplotting_sg)
+        trainsplotting_sg_connections.add_security_group(trainsplotting_web_sg)
         
         
         # Create Aurora RDS table for recording of railcar inspection data
