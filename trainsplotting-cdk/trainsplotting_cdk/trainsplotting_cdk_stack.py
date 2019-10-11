@@ -120,19 +120,19 @@ class TrainsplottingCdkStack(core.Stack):
         )
 
         # Add RDS security group to the ec2 Connection
-        #trainsplotting_rds_sg = ec2.SecurityGroup.from_security_group_id(self,"trainsplotting-rds-sg", security_group_id=railcar_inspection_table.security_group_id)
-        #trainsplotting_sg_connections.add_security_group(trainsplotting_rds_sg)
+        trainsplotting_rds_sg = ec2.SecurityGroup.from_security_group_id(self,"trainsplotting-rds-sg", security_group_id=railcar_inspection_table.security_group_id)
+        trainsplotting_sg_connections.add_security_group(trainsplotting_rds_sg)
         trainsplotting_sg_connections.allow_internally(ec2.Port(protocol=ec2.Protocol.ALL,string_representation="3306",to_port=db_port))
 
         # Grant read access to the lambda function to read the rds secret
-        #railcar_inspection_table.secret.grant_read(rekog_results_fn.role)
+        railcar_inspection_table.secret.grant_read(rekog_results_fn.role)
 
         # Add the environment variable with the DynamoDB name to the Rekognition results function
         #rekog_results_fn.add_environment(key='database_name', value=railcar_inspection_table.database_name)
-        #rekog_results_fn.add_environment(key='db_endpoint_address', value=railcar_inspection_table.db_instance_endpoint_address)
-        #rekog_results_fn.add_environment(key='db_endpoint_port', value=railcar_inspection_table.db_instance_endpoint_port)
-        #rekog_results_fn.add_environment(key='db_user_name', value=db_user_name)
-        #rekog_results_fn.add_environment(key='db_secret_arn', value=railcar_inspection_table.secret.secret_arn)
+        rekog_results_fn.add_environment(key='db_endpoint_address', value=railcar_inspection_table.db_instance_endpoint_address)
+        rekog_results_fn.add_environment(key='db_endpoint_port', value=railcar_inspection_table.db_instance_endpoint_port)
+        rekog_results_fn.add_environment(key='db_user_name', value=db_user_name)
+        rekog_results_fn.add_environment(key='db_secret_arn', value=railcar_inspection_table.secret.secret_arn)
 
         # Create Machine Image
         trainsplotting_app_machineimage = ec2.AmazonLinuxImage(
@@ -153,7 +153,7 @@ class TrainsplottingCdkStack(core.Stack):
         )
         
         # Create instance profile with permission to put object to the s3 bucket and get the secret        
-        #railcar_inspection_table.secret.grant_read(trainsplotting_app_ec2.role)
+        railcar_inspection_table.secret.grant_read(trainsplotting_app_ec2.role)
         
         # Setup user data to configure environment variables for DB info, DB secret, and S3 info
         
