@@ -16,6 +16,7 @@ def main(event, context):
 
     # Remove spaces from the text when validating regex to see if it is the serial number
     # txtAARMarkTextPrepped = txtAARMarkText.replace(" ","")
+    # regex = [a-zA-Z]{2,4}\d{4,6}\b
     # regex = \w{1,4}\W\d{4,6}
     # p = re.compile('(\w{1,4})(\d{4,6})')
     # m = p.search(txtAARMarkTextPrepped)
