@@ -173,6 +173,7 @@ class TrainsplottingCdkStack(core.Stack):
             vpc=trainsplotting_vpc,
             security_group=trainsplotting_sg,
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
+            key_name="ts-web-key"
             #role=,
         )
         trainsplotting_web_ec2.add_security_group(security_group=trainsplotting_web_sg)
