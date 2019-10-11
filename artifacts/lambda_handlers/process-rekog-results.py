@@ -8,6 +8,10 @@ def main(event, context):
     print(event)
     print("Message below")
     print(event['Records'][0]['Sns']['Message'])
+    textdata = event['Records'][0]['Sns']['Message']
+    splittextdata = textdata.split(';')
+    for text in splittextdata:
+        print(text)
     
     #
     # Sort Rekognition results by confidence
