@@ -178,7 +178,7 @@ class TrainsplottingCdkStack(core.Stack):
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
             #role=,
         )
-
+        trainsplotting_web_ec2.add_security_group(trainsplotting_web_sg)
 
         # Setup user data to configure environment variables for DB info, DB secret, and S3 info
         
