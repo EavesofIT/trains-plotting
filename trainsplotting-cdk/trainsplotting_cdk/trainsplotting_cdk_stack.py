@@ -161,6 +161,14 @@ class TrainsplottingCdkStack(core.Stack):
             storage=ec2.AmazonLinuxStorage.GENERAL_PURPOSE,
         )
         
+        # Create Web Machine Image
+        trainsplotting_web_machineimage = ec2.GenericLinuxImage(
+            amiMap={
+                "us-east-2": "ami-0270f291a8a0f0d6b"
+            },
+            props=ec2.GenericLinuxImageProps()       
+        )
+        
         # Create the trainsplotting app instance
         trainsplotting_app_ec2 = ec2.Instance(self, "trainsplotting-app",
             instance_type=ec2.InstanceType("t2.small"),
@@ -179,7 +187,7 @@ class TrainsplottingCdkStack(core.Stack):
         # Create the trainsplotting app instance
         trainsplotting_web_ec2 = ec2.Instance(self, "trainsplotting-web",
             instance_type=ec2.InstanceType("t2.small"),
-            machine_image=trainsplotting_app_machineimage,
+            machine_image=trainsplotting_web_machineimage,
             vpc=trainsplotting_vpc,
             security_group=trainsplotting_sg,
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
