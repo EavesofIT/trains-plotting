@@ -66,11 +66,14 @@ class TrainsplottingCdkStack(core.Stack):
         with open(proc_results_filepath, encoding="utf8") as file_process_results_process:
             rekogresults_code = file_process_results_process.read()
 
+
+
         # Creation of lambda function to process results of rekognition
         rekog_results_fn = lambda_.Function(
             self, "trainsplotting-rekognition-results",
-            code=lambda_.InlineCode(rekogresults_code),
-            handler="index.main",
+            #code=lambda_.InlineCode(rekogresults_code),.asset('artifacts/lambda_handlers/process-rekog-results.zip')
+            code=lambda_.AssetCode('artifacts/lambda_handlers/process-rekog-results.zip'),
+            handler="process-rekog-results.main",
             timeout=core.Duration.seconds(150),
             runtime=lambda_.Runtime.PYTHON_3_7,
             memory_size=256,
