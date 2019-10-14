@@ -11,7 +11,7 @@ from botocore.exceptions import ClientError
 # rds settings
 rds_host = os.environ['db_endpoint_address']
 name = os.environ['db_user_name']
-db_name = os.environ['RDS_DB_NAME']
+db_name = os.environ['db_name']
 
 
 secret_name = os.environ['db_secret_arn']
