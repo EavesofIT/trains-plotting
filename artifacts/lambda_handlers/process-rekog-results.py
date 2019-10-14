@@ -1,3 +1,4 @@
+import re
 import sys
 import pymysql
 import boto3
