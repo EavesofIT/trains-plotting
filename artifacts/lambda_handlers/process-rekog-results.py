@@ -112,31 +112,40 @@ def main(event, context):
     print ("Serial Below")
     print(serialnumber)
 
-
-
-
-
-
-
-
-    #
-    # Sort Rekognition results by confidence
-    # We are looking for a 1-4 letter by 4-6 number "word" or two separate values with high confidence(>90)
-    #
-
-    # Remove spaces from the text when validating regex to see if it is the serial number
-    # txtAARMarkTextPrepped = txtAARMarkText.replace(" ","")
-    # regex = [a-zA-Z]{2,4}\d{4,6}\b
-    # regex = \w{1,4}\W\d{4,6}
-    # p = re.compile('(\w{1,4})(\d{4,6})')
-    # m = p.search(txtAARMarkTextPrepped)
-    # Search value = SHQX50757
-    # m.group(0) = SHQX50757
-    # m.group(1) = SHQX
-    # m.group(2) = 50757
-    # m.group(2)[1] = 0
-
+    
     # Connect to RDS DB here
+    
+    item_count = 0
+    try:
+        openConnection()
+        # Introducing artificial random delay to mimic actual DB query time. Remove this code for actual use.
+        time.sleep(random.randint(1, 3))
+        with conn.cursor() as cur:
+            #cur.execute("select * from trainsPlotting_carimage")
+            #cur.execute("select * from trainsPlotting_railcar")
+            cur.execute("select * from *")
+            for row in cur:
+                item_count += 1
+                print(row)
+                # print(row)
+    except Exception as e:
+        # Error while opening connection or processing
+        print(e)
+    finally:
+        print("Closing Connection")
+        if(conn is not None and conn.open):
+            conn.close()
+
+    content =  "Selected %d items from RDS MySQL table" % (item_count)
+    response = {
+        "statusCode": 200,
+        "body": content,
+        "headers": {
+            'Content-Type': 'text/html',
+        }
+    }
+    return response    
+
 
     # 
     # Send the event to the next lambda which should start the deeper analysis for inspection points, after successfully storing in DynamoDB
