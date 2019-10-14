@@ -160,13 +160,12 @@ class TrainsplottingCdkStack(core.Stack):
             virtualization=ec2.AmazonLinuxVirt.HVM,
             storage=ec2.AmazonLinuxStorage.GENERAL_PURPOSE,
         )
-        
+
         # Create Web Machine Image
         trainsplotting_web_machineimage = ec2.GenericLinuxImage(
-            amiMap={
+            ami_map={
                 "us-east-2": "ami-0270f291a8a0f0d6b"
-            },
-            props=ec2.GenericLinuxImageProps()       
+            }    
         )
         
         # Create the trainsplotting app instance
