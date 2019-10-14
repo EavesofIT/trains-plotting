@@ -73,7 +73,7 @@ class TrainsplottingCdkStack(core.Stack):
             self, "trainsplotting-rekognition-results",
             #code=lambda_.InlineCode(rekogresults_code),.asset('artifacts/lambda_handlers/process-rekog-results.zip')
             code=lambda_.AssetCode('artifacts/lambda_handlers/process-rekog-results.zip'),
-            handler="process-rekog-results.main",
+            handler="process-rekog-results/process-rekog-results.main",
             timeout=core.Duration.seconds(150),
             runtime=lambda_.Runtime.PYTHON_3_7,
             memory_size=256,
