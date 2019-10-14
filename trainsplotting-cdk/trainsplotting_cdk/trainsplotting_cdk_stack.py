@@ -19,6 +19,36 @@ class TrainsplottingCdkStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
+        # Create VPC, subnets, and security groups
+        trainsplotting_vpc = ec2.Vpc(self,'trainsplotting-vpc',
+            cidr='10.0.8.0/21',
+            max_azs=2,
+            nat_gateways=1,
+            subnet_configuration=[
+                {"subnetType": ec2.SubnetType.PUBLIC,"name" : "dmz", "cidr_mask" : 24},
+                {"subnetType": ec2.SubnetType.PUBLIC,"name" : "web", "cidr_mask" : 24},
+                {"subnetType": ec2.SubnetType.PRIVATE,"name" : "app", "cidr_mask" : 24},
+                {"subnetType": ec2.SubnetType.ISOLATED,"name" : "data", "cidr_mask" : 24}
+                ]
+        )
+
+        # Create trainsplotting security group
+        trainsplotting_sg = ec2.SecurityGroup(self,"trainsplotting-app-sg",
+            vpc=trainsplotting_vpc
+        )
+        # Create trainsplotting web ssh login
+        trainsplotting_web_sg = ec2.SecurityGroup(self,"trainsplotting-web-sg",
+            vpc=trainsplotting_vpc
+        )
+        # Add ssh ingress
+        trainsplotting_web_sg_peer = ec2.Peer()
+        trainsplotting_web_sg.add_ingress_rule(peer=trainsplotting_web_sg_peer.any_ipv4(),connection=ec2.Port.tcp(22),description="This allows ssh into the web tier box")
+
+        #trainsplotting_sg.add_ingress_rule(peer=ec2.Peer.any_ipv4, connection=railcar_inspection_table.attr_endpoint_port, description="This allows access for the Lambda to reach the RDS")
+        trainsplotting_sg_connections = ec2.Connections()
+        trainsplotting_sg_connections.add_security_group(trainsplotting_sg)
+        trainsplotting_sg_connections.add_security_group(trainsplotting_web_sg)
+
         # Create ingestion_bucket for image uploads
         ingestion_bucket = s3.Bucket(self,
             "trainsplotting-ingestion",
@@ -43,7 +73,7 @@ class TrainsplottingCdkStack(core.Stack):
             handler="index.main",
             timeout=core.Duration.seconds(150),
             runtime=lambda_.Runtime.PYTHON_3_7,
-            memory_size=256
+            memory_size=256,
         )
 
         # SNS Topic for Rekognition to publish to when completed
@@ -81,36 +111,6 @@ class TrainsplottingCdkStack(core.Stack):
         photo_ingest_fn.add_to_role_policy(iam.PolicyStatement(actions=['rekognition:DetectText','rekognition:DetectLabels','rekognition:DetectModerationLabels'],resources=['*']))
 
 
-        # Create VPC, subnets, and security groups
-        trainsplotting_vpc = ec2.Vpc(self,'trainsplotting-vpc',
-            cidr='10.0.8.0/21',
-            max_azs=2,
-            nat_gateways=1,
-            subnet_configuration=[
-                {"subnetType": ec2.SubnetType.PUBLIC,"name" : "dmz", "cidr_mask" : 24},
-                {"subnetType": ec2.SubnetType.PUBLIC,"name" : "web", "cidr_mask" : 24},
-                {"subnetType": ec2.SubnetType.PRIVATE,"name" : "app", "cidr_mask" : 24},
-                {"subnetType": ec2.SubnetType.ISOLATED,"name" : "data", "cidr_mask" : 24}
-                ]
-        )
-        # Create trainsplotting security group
-        trainsplotting_sg = ec2.SecurityGroup(self,"trainsplotting-app-sg",
-            vpc=trainsplotting_vpc
-        )
-        # Create trainsplotting web ssh login
-        trainsplotting_web_sg = ec2.SecurityGroup(self,"trainsplotting-web-sg",
-            vpc=trainsplotting_vpc
-        )
-        # Add ssh ingress
-        trainsplotting_web_sg_peer = ec2.Peer()
-        trainsplotting_web_sg.add_ingress_rule(peer=trainsplotting_web_sg_peer.any_ipv4(),connection=ec2.Port.tcp(22),description="This allows ssh into the web tier box")
-
-        #trainsplotting_sg.add_ingress_rule(peer=ec2.Peer.any_ipv4, connection=railcar_inspection_table.attr_endpoint_port, description="This allows access for the Lambda to reach the RDS")
-        trainsplotting_sg_connections = ec2.Connections()
-        trainsplotting_sg_connections.add_security_group(trainsplotting_sg)
-        trainsplotting_sg_connections.add_security_group(trainsplotting_web_sg)
-        
-        
         # Create Aurora RDS table for recording of railcar inspection data
         # Add SSM parameter store of encrypted password
         db_user_name = "trainsplottingad"
