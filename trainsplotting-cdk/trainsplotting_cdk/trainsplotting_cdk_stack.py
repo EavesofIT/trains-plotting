@@ -66,11 +66,14 @@ class TrainsplottingCdkStack(core.Stack):
         with open(proc_results_filepath, encoding="utf8") as file_process_results_process:
             rekogresults_code = file_process_results_process.read()
 
+
+
         # Creation of lambda function to process results of rekognition
         rekog_results_fn = lambda_.Function(
             self, "trainsplotting-rekognition-results",
-            code=lambda_.InlineCode(rekogresults_code),
-            handler="index.main",
+            #code=lambda_.InlineCode(rekogresults_code),.asset('artifacts/lambda_handlers/process-rekog-results.zip')
+            code=lambda_.AssetCode('artifacts/lambda_handlers/process-rekog-results.zip'),
+            handler="process-rekog-results.main",
             timeout=core.Duration.seconds(150),
             runtime=lambda_.Runtime.PYTHON_3_7,
             memory_size=256,
@@ -118,6 +121,7 @@ class TrainsplottingCdkStack(core.Stack):
         # Add SSM parameter store of encrypted password
         db_user_name = "trainsplottingad"
         db_port = 3306
+        db_name = "trainsplotters"
         railcar_inspection_table = rds.DatabaseInstance(
             self, "trainsplotting-railcar-inspection",
             master_username=db_user_name,
@@ -128,7 +132,7 @@ class TrainsplottingCdkStack(core.Stack):
             storage_encrypted=True,
             port=3306,
             vpc_placement=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
-            database_name="trainsplotters"
+            database_name=db_name
             #instance_identifier="someusefulname"
             #vpc_security_group_ids=[trainsplotting_sg.security_group_id]
         )
@@ -146,6 +150,7 @@ class TrainsplottingCdkStack(core.Stack):
         rekog_results_fn.add_environment(key='db_endpoint_address', value=railcar_inspection_table.db_instance_endpoint_address)
         rekog_results_fn.add_environment(key='db_endpoint_port', value=railcar_inspection_table.db_instance_endpoint_port)
         rekog_results_fn.add_environment(key='db_user_name', value=db_user_name)
+        rekog_results_fn.add_environment(key='db_name', value=db_name)
         rekog_results_fn.add_environment(key='db_secret_arn', value=railcar_inspection_table.secret.secret_arn)
 
         # Create Machine Image
