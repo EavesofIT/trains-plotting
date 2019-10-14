@@ -128,6 +128,7 @@ class TrainsplottingCdkStack(core.Stack):
             storage_encrypted=True,
             port=3306,
             vpc_placement=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
+            database_name="trainsplotters"
             #instance_identifier="someusefulname"
             #vpc_security_group_ids=[trainsplotting_sg.security_group_id]
         )
