@@ -130,7 +130,8 @@ def main(event, context):
         openConnection()
         with conn.cursor() as cur:
             #cur.execute("select * from trainsPlotting_carimage")
-            select_railcarid = cur.execute("select * from trainsPlotting_railcar where rail_car_id={serialnumber}")
+            serialinsertsql = ("select * from trainsPlotting_railcar where rail_car_id=%s")
+            select_railcarid = cur.execute(serialinsertsql, (serialnumber))
             print("Railcar ID below")
             print(select_railcarid)
             if select_railcarid == 0:
