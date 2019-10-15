@@ -43,6 +43,8 @@ class TrainsplottingCdkStack(core.Stack):
         # Add ssh ingress
         trainsplotting_web_sg_peer = ec2.Peer()
         trainsplotting_web_sg.add_ingress_rule(peer=trainsplotting_web_sg_peer.any_ipv4(),connection=ec2.Port.tcp(22),description="This allows ssh into the web tier box")
+        trainsplotting_web_sg.add_ingress_rule(peer=trainsplotting_web_sg_peer.any_ipv4(),connection=ec2.Port.tcp(8000),description="This allows http into the web tier box")
+        trainsplotting_web_sg.add_ingress_rule(peer=trainsplotting_web_sg_peer.any_ipv4(),connection=ec2.Port.tcp(80),description="This allows http into the web tier box")
 
         #trainsplotting_sg.add_ingress_rule(peer=ec2.Peer.any_ipv4, connection=railcar_inspection_table.attr_endpoint_port, description="This allows access for the Lambda to reach the RDS")
         trainsplotting_sg_connections = ec2.Connections()
