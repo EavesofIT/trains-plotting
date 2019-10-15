@@ -145,7 +145,7 @@ def main(event, context):
                 print("Railcar ID")
                 rowid = cur.fetchone()[0]
                 print(rowid)
-            object_path = "http://s3.amazonaws.com/{bucket_name}/{object_name}"
+            object_path = "https://{}.s3.{}.amazonaws.com/{}".format(bucket_name,region_name,object_name)
             sql = ("INSERT INTO `trainsPlotting_carimage` (source_key,rail_car_id,image_date,notes) VALUES (%s,%s,%s,%s)")
             cur.execute(sql, (object_path, rowid, str(datetime.now()), 'test',))
             for row in cur:
