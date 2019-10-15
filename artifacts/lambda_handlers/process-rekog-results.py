@@ -158,6 +158,7 @@ def main(event, context):
     finally:
         print("Closing Connection")
         if(conn is not None and conn.open):
+            conn.commit()
             conn.close()
 
     content =  "Selected %d items from RDS MySQL table" % (item_count)
