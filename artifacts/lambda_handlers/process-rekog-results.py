@@ -8,6 +8,7 @@ import random
 import time
 import os
 from botocore.exceptions import ClientError
+from datetime import datetime
 
 # rds settings
 rds_host = os.environ['db_endpoint_address']
@@ -134,6 +135,7 @@ def main(event, context):
             select_railcarid = cur.execute(serialinsertsql, (serialnumber))
             print("Railcar ID below")
             print(select_railcarid)
+            rowid = None
             if select_railcarid == 0:
                 print("No Records Found, insertting")
                 serialinsertsql = ("INSERT INTO `trainsPlotting_railcar` (rail_car_id,car_type) VALUES (%s,%s)")
@@ -144,8 +146,8 @@ def main(event, context):
                 rowid = cur.fetchone()[0]
                 print(rowid)
             object_path = "http://s3.amazonaws.com/{bucket_name}/{object_name}"
-            sql = "INSERT INTO `trainsPlotting_carimage` (key,rail_car,notes) VALUES (%s,%s,%s)"
-            cur.execute(sql, (object_path, rowid, ''))
+            sql = ("INSERT INTO `trainsPlotting_carimage` (source_key,rail_car_id,image_date,notes) VALUES (%s,%s,%s,%s)")
+            cur.execute(sql, (object_path, rowid, str(datetime.now()), 'test',))
             for row in cur:
                 item_count += 1
                 print(row)
