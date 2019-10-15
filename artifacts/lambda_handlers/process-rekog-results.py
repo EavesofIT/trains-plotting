@@ -36,10 +36,14 @@ def openConnection():
     # See https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
     # We rethrow the exception by default.
     
+    print("Try to get secret")
+    print("Region Name")
+    print(region_name)
     try:
         get_secret_value_response = client.get_secret_value(
             SecretId=secret_name
         )
+        print("Secret response below")
         print(get_secret_value_response)
     except ClientError as e:
         print(e)
