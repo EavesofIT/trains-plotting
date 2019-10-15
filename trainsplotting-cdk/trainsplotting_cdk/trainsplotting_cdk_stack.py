@@ -80,7 +80,7 @@ class TrainsplottingCdkStack(core.Stack):
             runtime=lambda_.Runtime.PYTHON_3_7,
             memory_size=256,
             vpc=trainsplotting_vpc,
-            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE),
             security_group=trainsplotting_sg
         )
 
