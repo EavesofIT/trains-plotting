@@ -193,6 +193,7 @@ class TrainsplottingCdkStack(core.Stack):
             key_name="ts-web-key"
             #role=,
         )
+        railcar_inspection_table.secret.grant_read(trainsplotting_web_ec2.role)
         trainsplotting_web_ec2.add_security_group(security_group=trainsplotting_web_sg)
 
 
