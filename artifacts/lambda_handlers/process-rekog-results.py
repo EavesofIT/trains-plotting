@@ -102,7 +102,8 @@ def main(event, context):
     print("Message below")
     print(event['Records'][0]['Sns']['Message'])
     textdata = event['Records'][0]['Sns']['Message']
-    splittextdata = textdata.split(';')
+    drop_initial_textdata = textdata[textdata.find('Text Detected : ')+len('Text Detected : '):]
+    splittextdata = drop_initial_textdata.split(',')
     serialnumber = ""
     for text in splittextdata:
         print(text)
@@ -113,7 +114,8 @@ def main(event, context):
             print(m[0])
             serialnumber = m[0]
             # Also check the confidence and ensure about 66
-
+            # Confidence is showing up as the same value
+            
             # Need to handle the use case where there are more than one, they will currently overwrite
             break
     print ("Serial Below")
