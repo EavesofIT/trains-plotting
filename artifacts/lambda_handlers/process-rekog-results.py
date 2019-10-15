@@ -113,18 +113,31 @@ def main(event, context):
     print ("Serial Below")
     print(serialnumber)
 
+    strtest = textdata
+    object_name = strtest[strtest.find('object "')+len('object "'):strtest.find('" from bucket')]
+    bucket_name = strtest[strtest.find('from bucket "')+len('from bucket "'):strtest.find('" at 2')]
+
     
     # Connect to RDS DB here
     
     item_count = 0
     try:
         openConnection()
-        # Introducing artificial random delay to mimic actual DB query time. Remove this code for actual use.
-        time.sleep(random.randint(1, 3))
         with conn.cursor() as cur:
             #cur.execute("select * from trainsPlotting_carimage")
-            #cur.execute("select * from trainsPlotting_railcar")
-            cur.execute("select * from *")
+            select_railcarid = cur.execute("select * from trainsPlotting_railcar where rail_car_id={serialnumber}")
+            print("Railcar ID below")
+            print(select_railcarid)
+            if select_railcarid == 0:
+                print("No Records Found, insertting")
+                cur.execute("INSERT INTO 'trainsPlotting_railcar' (rail_car_id) VALUES {serialnumber}")
+                rowid = cur.lastrowid
+            else:
+                print("Railcar ID")
+                rowid = cur.fetchone()[0]
+                print(rowid)
+            object_path = "http://s3.amazonaws.com/{bucket_name}/{object_name}"
+            cur.execute("INSERT INTO 'trainsPlotting_carimage' (key,rail_car,notes) VALUES {object_path},{rowid},'')
             for row in cur:
                 item_count += 1
                 print(row)
