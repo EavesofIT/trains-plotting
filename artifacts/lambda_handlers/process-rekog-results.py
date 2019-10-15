@@ -135,15 +135,15 @@ def main(event, context):
             print(select_railcarid)
             if select_railcarid == 0:
                 print("No Records Found, insertting")
-                serialinsertsql = ("INSERT INTO 'trainsPlotting_railcar' (rail_car_id) VALUES (%s)")
-                cur.execute(serialinsertsql, (serialnumber))
+                serialinsertsql = ("INSERT INTO `trainsPlotting_railcar` (rail_car_id,car_type) VALUES (%s,%s)")
+                cur.execute(serialinsertsql, (serialnumber,'rail_car'))
                 rowid = cur.lastrowid
             else:
                 print("Railcar ID")
                 rowid = cur.fetchone()[0]
                 print(rowid)
             object_path = "http://s3.amazonaws.com/{bucket_name}/{object_name}"
-            sql = "INSERT INTO 'trainsPlotting_carimage' (key,rail_car,notes) VALUES (%s,%s,%s)"
+            sql = "INSERT INTO `trainsPlotting_carimage` (key,rail_car,notes) VALUES (%s,%s,%s)"
             cur.execute(sql, (object_path, rowid, ''))
             for row in cur:
                 item_count += 1
