@@ -137,7 +137,7 @@ def main(event, context):
                 rowid = cur.fetchone()[0]
                 print(rowid)
             object_path = "http://s3.amazonaws.com/{bucket_name}/{object_name}"
-            cur.execute("INSERT INTO 'trainsPlotting_carimage' (key,rail_car,notes) VALUES {object_path},{rowid},'')
+            cur.execute("INSERT INTO 'trainsPlotting_carimage' (key,rail_car,notes) VALUES {object_path},{rowid},''")
             for row in cur:
                 item_count += 1
                 print(row)
