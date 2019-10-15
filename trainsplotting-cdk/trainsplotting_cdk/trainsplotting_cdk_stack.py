@@ -57,7 +57,7 @@ class TrainsplottingCdkStack(core.Stack):
             encryption=s3.BucketEncryption.S3_MANAGED,
         )
         # Grant Public Read access, eliminate for intranet based applications
-        ingestion_bucket.grant_public_address()
+        ingestion_bucket.grant_public_access()
 
         #**********#
         # Could add another ingestion_bucket here and add the zip of the code to use in Lambda functions
