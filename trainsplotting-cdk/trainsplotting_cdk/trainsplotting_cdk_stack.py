@@ -180,6 +180,17 @@ class TrainsplottingCdkStack(core.Stack):
             key_name="ts-web-key"
             #role=,
         )
+
+        # Create the trainsplotting app instance
+        trainsplotting_app_ec2 = ec2.Instance(self, "demo-app",
+            instance_type=ec2.InstanceType("t2.small"),
+            machine_image=trainsplotting_app_machineimage,
+            vpc=trainsplotting_vpc,
+            security_group=trainsplotting_sg,
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
+            key_name="ts-web-key"
+            #role=,
+        )
         
         # Create instance profile with permission to put object to the s3 bucket and get the secret        
         railcar_inspection_table.secret.grant_read(trainsplotting_app_ec2.role)
