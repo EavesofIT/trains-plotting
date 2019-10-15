@@ -110,6 +110,7 @@ def main(event, context):
             # Also check the confidence and ensure about 66
 
             # Need to handle the use case where there are more than one, they will currently overwrite
+            break
     print ("Serial Below")
     print(serialnumber)
 
